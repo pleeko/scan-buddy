@@ -36,9 +36,15 @@ def parse_args():
     
 def find_and_order_contours(image):
    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-   gray = cv2.GaussianBlur(gray, (5, 5), 0)
-   blur = cv2.GaussianBlur(gray,(1,1),1000)
-   edged = cv2.Canny(gray, 75, 200)
+   blur = cv2.GaussianBlur(gray,(1,1),5000)
+   ret,thresh = cv2.threshold(blur,127,255,cv2.THRESH_BINARY)
+   edged = cv2.Canny(thresh, 75, 200)
+
+   # cv2.namedWindow("output", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions
+   # imS = cv2.resize(thresh, (1000, 1000))                    # Resize image
+   # cv2.imshow("output", thresh)                            # Show image
+   # cv2.waitKey(0) 
+
    contours, hierarchy  = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
    return sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
 
@@ -101,7 +107,6 @@ rows,cols = original_image.shape[:2]
 if config['text']:
    cv2.putText(original_image, config['text'], (10, int(croppedH*scale) - 10),
       cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
-
 
 print('saving...')
 if config['outputfile']:
