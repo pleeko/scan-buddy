@@ -38,11 +38,11 @@ def find_and_order_contours(image):
    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
    blur = cv2.GaussianBlur(gray,(1,1),5000)
    ret,thresh = cv2.threshold(blur,127,255,cv2.THRESH_BINARY)
-   edged = cv2.Canny(thresh, 75, 200)
+   edged = cv2.Canny(thresh,  0, 50, apertureSize=5)
 
    # cv2.namedWindow("output", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions
-   # imS = cv2.resize(thresh, (1000, 1000))                    # Resize image
-   # cv2.imshow("output", thresh)                            # Show image
+   # imS = cv2.resize(edged, (1000, 1000))                    # Resize image
+   # cv2.imshow("output", edged)                            # Show image
    # cv2.waitKey(0) 
 
    contours, hierarchy  = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
